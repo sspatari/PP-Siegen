@@ -72,6 +72,8 @@ void * f4(void * args)
 	cout << "f4 ended\n";
 	double *a = new double();
 	*a = 999 * (*(double *)args);
+	free(args);
+	args = NULL;
 	return (void *)a;
 }
 
