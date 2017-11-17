@@ -26,20 +26,20 @@ int main(int argc, char **argv)
 	a = f1(NULL);
 	pthread_create(&t1, NULL, f2, a);
 	pthread_create(&t2, NULL, f3, a);
+	pthread_create(&t3, NULL, f4, a);
 	pthread_join(t1, &b);
 	pthread_join(t2, &c);
+	pthread_join(t3, &a);
 	// a = f4(a);
 	double d[2] = {*(double*)b, *(double*)c};
-	pthread_create(&t1, NULL, f4, a);
-	pthread_create(&t2, NULL, f5, b);
-	pthread_create(&t3, NULL, f6, (void*)d);
-	pthread_join(t1, &a);
-	pthread_create(&t1, NULL, f7, a);
+	pthread_create(&t1, NULL, f5, b);
+	pthread_create(&t2, NULL, f6, (void*)d);
+	pthread_create(&t3, NULL, f7, a);
 	pthread_join(t1, &temp1);
 	pthread_join(t2, &temp2);
 	pthread_join(t3, &temp3);
 
-	res = *(double*)temp2 + *(double*)temp1 + *(double*)temp3;
+	res = *(double*)temp1 + *(double*)temp3 + *(double*)temp2;
 
 	cout << "Result = " << setprecision(18) << res << "\n";
 	cout << "Time: " << (getTime()-start) << "\n";
