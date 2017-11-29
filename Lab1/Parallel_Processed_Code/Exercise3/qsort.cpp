@@ -13,6 +13,7 @@
 #include <stdlib.h>
 #include <sys/time.h>
 #include <pthread.h>
+#include <cstring>
 
 using namespace std;
 const int MINSIZE = 1000000;
@@ -167,9 +168,30 @@ void printArray(int *a, int n)
 ** Main program.
 ** Invocation: qsort <array length>
 */
+
+int compar(const void *a, const void *b)
+{
+	return ( *(int*)a - *(int*)b );
+}
+
+int * arrayDup(int const * src, size_t len)
+{
+	cout << len << endl;
+	int * copiedArray = (int *)malloc(len * sizeof(int));
+	if(copiedArray == NULL)
+	   cout << "Malloc error" << endl;
+	
+	// for(int i = 0; i < len ; ++i) {
+	//    cout << i << endl;
+	//    copiedArray[i] = src[i];
+	// }
+	memcpy(copiedArray, src, len);
+	return copiedArray;
+}
+
 int main(int argc, char **argv)
 {
-	int *array;
+	int *array, *array2;
 	int n;
 	double timeStart, timeEnd;
 
@@ -200,16 +222,23 @@ int main(int argc, char **argv)
 	/*
 	** Sort and measure the time ...
 	*/
+
+	// printArray(array, n);
+	// Copying array to array2;
+	array2 = arrayDup(array, n);
+	// printArray(array2, n);
+
 	Args args(array, 0, n-1);
 
+	// Our implementation of quicksort
 	timeStart = getTime();
-
 	quicksort((void *)&args);
 	timeEnd = getTime();
 
 	/*
 	** Check it the array is sorted correctly.
 	*/
+
 	if (checkSorted(array, n)) {
 		cout << "OK, array is sorted!\n";
 	}
@@ -217,7 +246,23 @@ int main(int argc, char **argv)
 		cout << "OOPS, array is NOT sorted!\n";
 	}
 
-	cout << "Time for sorting: " << setprecision(3) << (timeEnd-timeStart) << " seconds\n";
+	cout << "Time for our implementation of sorting: " << setprecision(3) << (timeEnd-timeStart) << " seconds\n";
 
+	// C standard qsort implementation
+	timeStart = getTime();
+	qsort((void *)array2, n, sizeof(int), compar);
+	timeEnd = getTime();
+
+	if (checkSorted(array2, n)) {
+		cout << "OK, array is sorted!\n";
+	}
+	else {
+		cout << "OOPS, array is NOT sorted!\n";
+	}
+
+	cout << "Time for C standard qsort implementation: " << setprecision(3) << (timeEnd-timeStart) << " seconds\n";
+
+	// printArray(array, n);
+	// printArray(array2, n);
 	return 0;
 }
