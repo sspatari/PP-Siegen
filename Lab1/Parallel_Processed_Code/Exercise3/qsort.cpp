@@ -176,11 +176,10 @@ int compar(const void *a, const void *b)
 
 int * arrayDup(int const * src, size_t len)
 {
-	cout << len << endl;
 	int * copiedArray = (int *)malloc(len * sizeof(int));
 	if(copiedArray == NULL)
 	   cout << "Malloc error" << endl;
-	
+
 	// for(int i = 0; i < len ; ++i) {
 	//    cout << i << endl;
 	//    copiedArray[i] = src[i];
