@@ -141,10 +141,17 @@ void loop6()
 	}
 }
 
+bool isPowerOfTwo (int x)
+{
+  /* First x in the below expression is for the case when x is 0 */
+  return x && (!(x&(x-1)));
+}
+
 void loop7()
 {
-	#pragma omp parallel for
+	#pragma omp parallel for ordered
 	for (int i=0; i<N; i++) {
+		#pragma omp ordered
 		a[map[i]] = a[i] + b[i];
 	}
 }
@@ -152,6 +159,7 @@ void loop7()
 void loop8()
 {
 	for (int i=1; i<M-1; i++) {
+		#pragma omp parralel for
 		for (int j=1; j<M-1; j++) {
 			m[i][j] = (m[i-1][j-1] + m[i-1][j+1] + m[i+1][j-1] + m[i+1][j+1]) / 4;
 		}
